@@ -1,0 +1,30 @@
+# Redis 测试脚本
+# 连接命令: redis-cli -h 192.168.31.29 -p 6379 -a 625625mahao
+
+# 测试连接
+ping
+
+# 设置测试数据
+set test_key "Hello Redis"
+get test_key
+
+# 设置哈希数据
+hset user:1 username "admin"
+hset user:1 role "admin"
+hgetall user:1
+
+# 设置列表数据
+lpush documents "document1.pdf"
+lpush documents "document2.docx"
+lrange documents 0 -1
+
+# 查看所有键
+keys *
+
+# 删除测试数据
+del test_key
+del user:1
+del documents
+
+# 再次查看所有键
+keys *

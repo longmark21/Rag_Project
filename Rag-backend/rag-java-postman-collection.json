@@ -1,0 +1,131 @@
+{
+  "info": {
+    "_postman_id": "rag-java-collection",
+    "name": "RAG Java API Collection",
+    "description": "RAG 知识库后端 API 测试集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "流式聊天",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{
+  \"question\": \"什么是 RAG 技术？\",
+  \"sessionId\": \"test-session-123\",
+  \"userId\": \"user-123\",
+  \"fileIds\": [1, 2, 3]
+}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/chat/stream",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "chat",
+            "stream"
+          ]
+        },
+        "description": "使用 SSE 流式返回 AI 回答，支持打字机效果"
+      },
+      "response": []
+    },
+    {
+      "name": "上传文档",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": ""
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/documents/upload",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "documents",
+            "upload"
+          ]
+        },
+        "description": "上传 PDF/Word/TXT 文件并进行向量化处理"
+      },
+      "response": []
+    },
+    {
+      "name": "获取文档列表",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/documents",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "documents"
+          ]
+        },
+        "description": "获取所有已上传的文档列表"
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// 前置脚本"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// 测试脚本"
+        ]
+      }
+    }
+  ]
+}

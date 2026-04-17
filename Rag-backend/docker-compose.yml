@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # 后端Java应用
+  rag-backend:
+    build: .
+    image: rag-knowledge-base:1.0.0
+    container_name: rag-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    volumes:
+      - /vol1/1000/My-Rag-Project/uploads:/vol1/1000/My-Rag-Project/uploads
+      - /vol1/1000/My-Rag-Project/logs:/vol1/1000/My-Rag-Project/logs
+      - /vol1/1000/Docker/openjdk/app/.env:/vol1/1000/Docker/openjdk/app/.env
+    restart: unless-stopped
+    networks:
+      - rag-network
+
+networks:
+  rag-network:
+    driver: bridge
