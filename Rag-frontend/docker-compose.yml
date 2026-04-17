@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # 前端服务
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - rag-network
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+
+  # 后端服务
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - rag-network
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATA_DIR=/data
+    volumes:
+      - /vol1/1000/My-Rag-Project:/data
+      - /vol1/1000/Docker/openjdk/app:/app
+
+networks:
+  rag-network:
+    driver: bridge

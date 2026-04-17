@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #409EFF;
+  --secondary-color: #67C23A;
+  --warning-color: #E6A23C;
+  --danger-color: #F56C6C;
+  --info-color: #909399;
+  --light-color: #F5F7FA;
+  --dark-color: #1F2329;
+  --border-color: #E4E7ED;
+  --text-color: #303133;
+  --text-color-secondary: #606266;
+  --text-color-light: #909399;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-color);
+  background-color: #F0F2F5;
+  margin: 0;
+  padding: 0;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* 消息气泡样式 */
+.message-bubble {
+  @apply rounded-lg px-4 py-3 max-w-[80%] break-words;
+}
+
+.user-message {
+  @apply bg-primary text-white rounded-tr-none self-end;
+}
+
+.ai-message {
+  @apply bg-white text-gray-800 rounded-tl-none self-start shadow-sm;
+}
+
+/* 上传区域样式 */
+.upload-area {
+  @apply border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors duration-300;
+}
+
+/* 标签样式 */
+.tag {
+  @apply px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-600 mr-2 mb-2 inline-block cursor-pointer hover:bg-blue-100 transition-colors duration-200;
+}
