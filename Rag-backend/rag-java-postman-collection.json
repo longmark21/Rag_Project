@@ -19,12 +19,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{
-  \"question\": \"什么是 RAG 技术？\",
-  \"sessionId\": \"test-session-123\",
-  \"userId\": \"user-123\",
-  \"fileIds\": [1, 2, 3]
-}",
+          "raw": "{\n  \"question\": \"什么是 RAG 技术？\",\n  \"sessionId\": \"test-session-123\",\n  \"userId\": \"user-123\",\n  \"fileIds\": [1, 2, 3]\n}",
           "options": {
             "raw": {
               "language": "json"

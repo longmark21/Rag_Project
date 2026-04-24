@@ -1,33 +1,21 @@
 server:
-  port: 8082  # 修改为 8082，避免与 Nginx 和其他服务冲突
+  port: 8082
   servlet:
     context-path: /api
 
 spring:
   main:
-    allow-circular-references: true  # 允许循环依赖
-    
+    allow-circular-references: true
+
   application:
     name: rag-knowledge-base
 
   datasource:
     primary:
-      jdbc-url: jdbc:mysql://192.168.31.29:3360/rag_knowledge?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
-      username: root
-      password: abc
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      hikari:
-        maximum-pool-size: 20
-        minimum-idle: 5
-        connection-timeout: 30000
-        idle-timeout: 600000
-        max-lifetime: 1800000
-
-    vector:
-      jdbc-url: jdbc:postgresql://192.168.31.29:5434/rag_vector?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-      username: postgres
-      password: abc
-      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:h2:mem:rag_knowledge;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
       hikari:
         maximum-pool-size: 10
         minimum-idle: 2
@@ -35,35 +23,47 @@ spring:
         idle-timeout: 600000
         max-lifetime: 1800000
 
+    vector:
+      jdbc-url: jdbc:h2:mem:rag_vector;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+      hikari:
+        maximum-pool-size: 5
+        minimum-idle: 1
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
   jpa:
     hibernate:
-      ddl-auto: create  # 首次启动时自动创建表
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
         use_sql_comments: true
     open-in-view: false
 
   data:
     redis:
-      host: 192.168.31.29
-      port: 6380
-      password: abc
+      host: localhost
+      port: 6379
+      password:
       database: 0
       lettuce:
         pool:
-          max-active: 20
-          max-idle: 10
-          min-idle: 2
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
           max-wait: 3000ms
       timeout: 3000ms
 
   ai:
     default-model: kimi
     dashscope:
-      api-key: abc
+      api-key: demo-key
       chat:
         enabled: true
         options:
@@ -78,7 +78,7 @@ spring:
       image:
         enabled: false
     moonshot:
-      api-key: abc
+      api-key: demo-key
       base-url: https://api.moonshot.cn/v1
       chat:
         options:
@@ -98,12 +98,12 @@ spring-ai:
       distance-type: cosine
       index-type: ivfflat
       index-list-size: 100
-      max-connections: 10
+      max-connections: 5
 
 file:
   upload:
-    path: /vol1/1000/My-Rag-Project/uploads
-    max-size: 524288000  # 500MB in bytes
+    path: ./uploads
+    max-size: 524288000
     allowed-types: pdf,doc,docx,txt
 
 text:
@@ -128,11 +128,10 @@ logging:
     com.example.rag: DEBUG
     org.springframework.ai: DEBUG
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   file:
-    name: /vol1/1000/My-Rag-Project/logs/rag-knowledge-base.log
+    name: ./logs/rag-knowledge-base.log
     max-size: 100MB
     max-history: 30
 
@@ -140,7 +139,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
+        include: health,info,metrics
   endpoint:
     health:
       show-details: always

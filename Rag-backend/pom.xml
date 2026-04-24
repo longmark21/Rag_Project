@@ -14,7 +14,7 @@
     
     <groupId>com.example</groupId>
     <artifactId>rag-knowledge-base</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>RAG Knowledge Base</name>
     <description>基于RAG的企业知识库问答助手</description>
     
@@ -77,6 +77,12 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
         

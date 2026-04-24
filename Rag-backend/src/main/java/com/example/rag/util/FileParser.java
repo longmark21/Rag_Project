@@ -1,6 +1,7 @@
 package com.example.rag.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.hwpf.HWPFDocument;
@@ -55,10 +56,38 @@ public class FileParser {
     }
 
     private String parsePDF(File file) throws IOException {
-        // TODO: PDFBox 3.0.1 API has changed. Need to use PDDocument.load() with proper parameters
-        // 暂时使用模拟实现，实际部署时需要使用正确的 PDFBox 3.0 API
-        log.info("PDF 解析（模拟实现）: 文件名={}", file.getName());
-        return "这是一个 PDF 文件的模拟解析结果。实际应用中需要使用正确的 PDFBox 3.0 API 进行解析。文件：" + file.getName();
+        log.info("PDF 解析开始: 文件名={}", file.getName());
+        try (PDDocument document = Loader.loadPDF(file)) {
+            if (document.isEncrypted()) {
+                log.warn("PDF 文件已加密，尝试解密: 文件名={}", file.getName());
+                throw new IOException("PDF 文件已加密，无法解析：" + file.getName());
+            }
+
+            PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setSortByPosition(true);
+            stripper.setAddMoreFormatting(false);
+
+            int pageCount = document.getNumberOfPages();
+            log.info("PDF 页数: {}", pageCount);
+
+            StringBuilder text = new StringBuilder();
+            for (int i = 1; i <= pageCount; i++) {
+                stripper.setStartPage(i);
+                stripper.setEndPage(i);
+                String pageText = stripper.getText(document);
+                text.append(pageText);
+                if (i < pageCount) {
+                    text.append("\n\n");
+                }
+            }
+
+            String result = text.toString();
+            log.info("PDF 解析完成: 文件名={}, 页数={}, 字符数={}", file.getName(), pageCount, result.length());
+            return result;
+        } catch (IOException e) {
+            log.error("PDF 文件解析失败: 文件名={}", file.getName(), e);
+            throw new IOException("PDF 文件解析失败：" + e.getMessage(), e);
+        }
     }
 
     private String parseDoc(File file) throws IOException {
